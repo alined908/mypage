@@ -1,0 +1,4 @@
+\ticket
+tmpnodejsnpm-cache/
+.env
+node_modules/
