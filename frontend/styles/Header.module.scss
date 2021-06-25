@@ -1,0 +1,146 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .75rem 1.25rem;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.names {
+    margin-left: 1rem;
+}
+
+.name {
+    font-weight: 500;
+    font-size: 1.15rem;
+}
+
+.link {
+    font-size: 0.9rem;
+}
+
+.navigation{
+    display: flex;
+}
+
+.navigationMobile {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color: black;
+    z-index: 5;
+    padding: 2rem;
+
+    .navigationLinks{
+        color: white;
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-top: 2rem;
+
+        div {
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all .25s ease;
+
+            &:hover {
+                color: var(--hover-color);
+            }
+        }
+    }
+}
+
+.burger {
+    display: none;
+    cursor: pointer;
+    span {
+        display: block;
+        width: 30px;
+        height: 4px;
+        margin-bottom: 5px;
+        position: relative;
+        background: black;
+        border-radius: 10px;
+        z-index: 1;
+    }
+}
+
+
+.navigation{
+    .navigationTab {
+        cursor: pointer;
+        padding: .5rem;
+        margin: 0 1rem;
+        font-weight: bold;
+        font-size: 1.15rem;
+        transition: all .25s ease;
+    
+        &:hover {
+            color: var(--hover-color);
+        }
+    }
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: all .25s ease;
+
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.05);
+    }
+}
+
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 25px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    &:hover::before, &:hover::after {
+        background-color: var(--hover-color);
+    }
+}
+
+.close:before, .close:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 4px;
+    background-color: white;
+}
+.close:before {
+    transform: rotate(45deg);
+}
+.close:after {
+    transform: rotate(-45deg);
+}
+
+@media only screen and (max-width: 700px) {
+
+    .header{
+        padding: .75rem 1.1rem;
+    }
+
+    .navigation {
+        .navigationTab{
+            display: none;
+        }
+    }
+
+    .burger {
+        display: block;
+    }
+}

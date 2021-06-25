@@ -1,0 +1,116 @@
+.container{
+    padding: 2rem 3rem;
+    margin-top: -1rem;
+}
+
+.inner{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header{
+    margin-bottom: 2rem;
+    font-size: 4rem;
+    font-weight: 500;
+}
+
+.blurb {
+    max-width: 600px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    line-height: 2.1rem;
+}
+
+.post {
+    background-color: white;
+    border-radius: .5rem;
+    box-shadow: var(--shadow-m);
+    overflow: hidden;
+    transition: all .25s ease;
+    text-align: center;
+    max-width: 320px;
+
+    &:hover{
+        transform: translateY(-10px);
+    }
+}
+
+.postInfo {
+    display: flex;
+    flex-direction: column;
+    padding: .5rem 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.postDate {
+    font-size: .9rem;
+}
+
+.postDescription{
+    color: rgb(170, 170, 170);
+    font-size: .9rem;
+}
+
+.postTitle{
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.responsiveImageContainer{
+    width: 100%;
+    max-width: 500px;
+
+    > div {
+        position: unset !important;
+    }
+
+    .responsiveImage{
+        object-fit: contain;
+        width: 100% !important;
+        position: relative !important;
+        height: unset !important;
+    }
+}
+
+.button, .buttonDisabled {
+    cursor: pointer;
+    --tw-bg-opacity: .75;
+    background-color: var(--bg-green);
+    box-shadow: var(--shadow-s);
+    border-radius: .25rem;
+    text-align: center;
+    font-weight: 600;
+    padding: .7rem .9rem;
+    color: rgba(255,255,255, 1);
+    border: 0;
+
+    &:hover {
+       background-color:rgb(46,139,87);
+    }
+}
+.buttonDisabled {
+    opacity: .5;
+
+    &:hover{
+        background-color: var(--bg-green);
+    }
+}
+
+.text {
+    margin-bottom: 1rem;
+}
+
+
+@media only screen and (max-width: 700px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .header{
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+}
