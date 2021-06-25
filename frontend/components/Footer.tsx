@@ -1,9 +1,9 @@
 import React from 'react';
-import Github from '../public/github.svg';
-import Twitter from '../public/twitter.svg';
-import Linkedin from '../public/linkedin.svg';
-import Medium from '../public/medium.svg';
 import styles from '../styles/Footer.module.scss';
+const Github = require('../public/github.svg');
+const Twitter = require('../public/twitter.svg');
+const Linkedin = require('../public/linkedin.svg');
+const Medium = require('../public/medium.svg');
 
 const SVG = ({children, link}) => {
 
