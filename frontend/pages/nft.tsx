@@ -17,6 +17,7 @@ const NFT = () => {
     const [burned, setBurned] = useState(false);
 
     useEffect(() => {
+      requestAccount();
       //checkConnected();
     }, [])
 
@@ -34,6 +35,11 @@ const NFT = () => {
         const accounts = await provider.listAccounts();
         setAccount(accounts[0]);
       }
+    }
+
+    // Access to Metamask account
+    async function requestAccount() {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
     const connectAccount = async () => {
@@ -111,10 +117,6 @@ const NFT = () => {
           }
         })
       }
-    }
-    // Access to Metamask account
-    async function requestAccount() {
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
     async function mintTicket() {
