@@ -4,7 +4,7 @@ import Image from 'next/image';
 import genericStyles from '../styles/generic.module.scss';
 import nftStyles from '../styles/nft.module.scss';
 import AlinedTicket from '../artifacts/AlinedTicket.json';
-import { burnTicketError, burnTicketSuccess, connectAccountError, mintTicketError, mintTicketSuccess } from '../actions/notifications';
+import { burnTicketError, burnTicketSuccess, connectAccountError, mintTicketError, mintTicketSuccess, wrongNetworkError } from '../actions/notifications';
 import Emoji from '../components/Emoji';
 import SVG from '../components/SVG';
 import CheckBox from '../components/CheckBox';
@@ -57,13 +57,22 @@ const NFT = () => {
       await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
+    const isNetworkRinkeby = () => {
+      return window.ethereum.networkVersion === '4';
+    }
+
     const connectAccount = async () => {
       if (typeof window.ethereum !== 'undefined'){
         await requestAccount()
+        if (!isNetworkRinkeby()){
+          wrongNetworkError();
+          return false;
+        };
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const contract = new ethers.Contract(ticketAddress, AlinedTicket.abi, provider)
         const address = await signer.getAddress();
+        setLoading(true);
 
         try {
           const data = await contract.balanceOf(address);
@@ -83,13 +92,12 @@ const NFT = () => {
 
           setMinted(minted);
           setBurned(burned);
-          
+          setAccount(await signer.getAddress());
         } catch (err) {
-          console.log(err);
           connectAccountError()
         }
 
-        setAccount(await signer.getAddress());
+        setLoading(false);
       }
     }
 
@@ -101,6 +109,7 @@ const NFT = () => {
         const contract = new ethers.Contract(ticketAddress, AlinedTicket.abi, provider).connect(signer)
         const address = await signer.getAddress();
         setLoading(true)
+
         try {
           const tokenID = await contract.tokenIDOwnedByAddress(address);
           const transaction = await contract.burn(tokenID);
@@ -110,6 +119,7 @@ const NFT = () => {
         } catch(e){
           burnTicketError();
         }
+
         setLoading(false)
       }
     }
@@ -122,6 +132,7 @@ const NFT = () => {
         const contract = new ethers.Contract(ticketAddress, AlinedTicket.abi, provider).connect(signer)
         const address = await signer.getAddress();
         setLoading(true)
+
         try {
           const transaction = await contract.mint(address)
           await transaction.wait()
@@ -130,6 +141,7 @@ const NFT = () => {
         } catch(e){
           mintTicketError()
         }  
+        
         setLoading(false)
       }
     }

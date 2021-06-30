@@ -5,7 +5,23 @@ const connectAccountError = () => {
         title: "Error!",
         message: "Unable to retrieve information for address.",
         type: "danger",
-        insert: "bottom",
+        insert: "top",
+        container: "top-left",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 3000,
+          onScreen: true
+        }
+    })
+}
+
+const wrongNetworkError = () => {
+    store.addNotification({
+        title: "Error!",
+        message: "Please switch network to Rinkeby.",
+        type: "danger",
+        insert: "top",
         container: "top-left",
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],
@@ -21,8 +37,8 @@ const burnTicketSuccess = () => {
         title: "Success!",
         message: "Burned ticket. Message for more details.",
         type: "success",
-        insert: "bottom",
-        container: "bottom-right",
+        insert: "top",
+        container: "top-left",
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],
         dismiss: {
@@ -37,8 +53,8 @@ const burnTicketError = () => {
         title: "Error!",
         message: "Unable to burn ticket.",
         type: "error",
-        insert: "bottom",
-        container: "bottom-right",
+        insert: "top",
+        container: "top-left",
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],
         dismiss: {
@@ -53,8 +69,8 @@ const mintTicketSuccess = () => {
         title: "Success",
         message: "Minted ticket!",
         type: "success",
-        insert: "bottom",
-        container: "bottom-right",
+        insert: "top",
+        container: "top-left",
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],
         dismiss: {
@@ -69,8 +85,8 @@ const mintTicketError = () => {
         title: "Error",
         message: "Unable to mint ticket. Either you already have a ticket or you will need to try again.",
         type: "danger",
-        insert: "bottom",
-        container: "bottom-right",
+        insert: "top",
+        container: "top-left",
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],
         dismiss: {
@@ -80,4 +96,4 @@ const mintTicketError = () => {
     })
 }
 
-export {connectAccountError, burnTicketSuccess, burnTicketError, mintTicketSuccess, mintTicketError}
+export {connectAccountError, burnTicketSuccess, burnTicketError, mintTicketSuccess, mintTicketError, wrongNetworkError}
