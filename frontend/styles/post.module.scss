@@ -1,0 +1,44 @@
+.post {
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: .5rem;
+    box-shadow: var(--shadow-m);
+    overflow: hidden;
+    transition: all .25s ease;
+    text-align: center;
+    max-width: 320px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 2rem;
+
+    &:hover{
+        transform: translate(5px, 5px);
+    }
+}
+
+.postInfo {
+    display: flex;
+    flex-direction: column;
+    padding: .5rem 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.postTime {
+    display: flex;
+    align-items: center;
+    font-size: .9rem;
+    color: rgb(150, 150, 150);
+
+    .separator{
+        margin: 0rem .5rem;
+    }
+}
+
+.postDescription{
+    font-size: .9rem;
+}
+
+.postTitle{
+    margin: .5rem 0;
+}
