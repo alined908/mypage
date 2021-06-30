@@ -26,7 +26,6 @@ const NFT = () => {
 
     useEffect(() => {
       checkMetaMaskDownloaded();
-      console.log(metaMaskDownloaded);
       //requestAccount();
       //checkConnected();
     }, [])
@@ -48,7 +47,9 @@ const NFT = () => {
     }
 
     const checkMetaMaskDownloaded = () : void => {
-      setMetaMaskDownloaded(window.ethereum.isMetaMask);
+      if (typeof window.ethereum !== 'undefined'){
+        setMetaMaskDownloaded(window.ethereum.isMetaMask);
+      }
     }
 
     // Access to Metamask account
@@ -57,56 +58,60 @@ const NFT = () => {
     }
 
     const connectAccount = async () => {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(ticketAddress, AlinedTicket.abi, provider)
-      const address = await signer.getAddress();
+      if (typeof window.ethereum !== 'undefined'){
+        await requestAccount()
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(ticketAddress, AlinedTicket.abi, provider)
+        const address = await signer.getAddress();
 
-      try {
-        const data = await contract.balanceOf(address);
-        const existData = await contract.tokenIDOwnedByAddress(address);
-        const minted = data.toNumber() === 1 || existData.toNumber() >= 1;
-        const burned = data.toNumber() === 0 && existData.toNumber() >= 1;
+        try {
+          const data = await contract.balanceOf(address);
+          const existData = await contract.tokenIDOwnedByAddress(address);
+          const minted = data.toNumber() === 1 || existData.toNumber() >= 1;
+          const burned = data.toNumber() === 0 && existData.toNumber() >= 1;
 
-        if (minted || burned) {
-          try {
-            const tokenURI = await contract.tokenURI(existData.toNumber());
-            setTicket(tokenURI);
+          if (minted || burned) {
+            try {
+              const tokenURI = await contract.tokenURI(existData.toNumber());
+              setTicket(tokenURI);
+            }
+            catch (e) {
+              console.log(e);
+            }
           }
-          catch (e) {
-            console.log(e);
-          }
+
+          setMinted(minted);
+          setBurned(burned);
+          
+        } catch (err) {
+          console.log(err);
+          connectAccountError()
         }
 
-        setMinted(minted);
-        setBurned(burned);
-        
-        
-
-      } catch (err) {
-        console.log(err);
-        connectAccountError()
+        setAccount(await signer.getAddress());
       }
-
-      setAccount(await signer.getAddress());
     }
 
     const burnTicket = async () => {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner()
-      const contract = new ethers.Contract(ticketAddress, AlinedTicket.abi, provider).connect(signer)
-      const address = await signer.getAddress();
-      setLoading(true)
-      try {
-        const tokenID = await contract.tokenIDOwnedByAddress(address);
-        const transaction = await contract.burn(tokenID);
-        await transaction.wait()
-        burnTicketSuccess();
-        setBurned(true);
-      } catch(e){
-        burnTicketError();
+      if (typeof window.ethereum !== 'undefined'){
+        await requestAccount()
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner()
+        const contract = new ethers.Contract(ticketAddress, AlinedTicket.abi, provider).connect(signer)
+        const address = await signer.getAddress();
+        setLoading(true)
+        try {
+          const tokenID = await contract.tokenIDOwnedByAddress(address);
+          const transaction = await contract.burn(tokenID);
+          await transaction.wait()
+          burnTicketSuccess();
+          setBurned(true);
+        } catch(e){
+          burnTicketError();
+        }
+        setLoading(false)
       }
-      setLoading(false)
     }
 
     const mintTicket = async () => {
@@ -194,7 +199,7 @@ const NFT = () => {
                 <CheckBox checked={account}/>
               </TextBoxSubHeader>
               <TextBoxUnorderedList>
-                {!account && 
+                {metaMaskDownloaded && !account && 
                   <div className={styles.wallet}>
                     <button className={styles.button} onClick={connectAccount}>
                       {loading && <div className={styles.spinner}></div>}
