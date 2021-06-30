@@ -4,32 +4,29 @@ import Image from 'next/image';
 import genericStyles from '../styles/generic.module.scss';
 import nftStyles from '../styles/nft.module.scss';
 import AlinedTicket from '../artifacts/AlinedTicket.json';
-import { store } from 'react-notifications-component';
+import { burnTicketError, burnTicketSuccess, connectAccountError, mintTicketError, mintTicketSuccess } from '../actions/notifications';
 import Emoji from '../components/Emoji';
+import SVG from '../components/SVG';
+import CheckBox from '../components/CheckBox';
 import { TextBox, TextBoxSubHeader, TextBoxUnorderedList, TextBoxListItem } from '../components/TextBox';
 import { SplitContainer, ContainerLeft, ContainerRight } from '../components/SplitContainer';
 
 const ticketAddress = "0x192d6AD08d70c9a94BFF20763ca08D01D23DD8e6";
 const styles = {...genericStyles, ...nftStyles};
-
+const MetaMaskSVG = require('../public/metamask.svg');
 declare let window: any;
-
-interface buttonJSON {
-  text: string
-  style: string
-  disabled: boolean
-  onClick: () => void
-}
 
 const NFT = () => {
     const [account, setAccount] = useState(null);
     const [minted, setMinted] = useState(false);
     const [burned, setBurned] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [ticket, setTicket] = useState(null);
     const [metaMaskDownloaded, setMetaMaskDownloaded] = useState(false);
 
     useEffect(() => {
       checkMetaMaskDownloaded();
+      console.log(metaMaskDownloaded);
       //requestAccount();
       //checkConnected();
     }, [])
@@ -62,35 +59,33 @@ const NFT = () => {
     const connectAccount = async () => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      
-      
       const contract = new ethers.Contract(ticketAddress, AlinedTicket.abi, provider)
       const address = await signer.getAddress();
+
       try {
         const data = await contract.balanceOf(address);
         const existData = await contract.tokenIDOwnedByAddress(address);
-        if (data.toNumber() === 1 || existData.toNumber() >= 1){
-          setMinted(true);
+        const minted = data.toNumber() === 1 || existData.toNumber() >= 1;
+        const burned = data.toNumber() === 0 && existData.toNumber() >= 1;
+
+        if (minted || burned) {
+          try {
+            const tokenURI = await contract.tokenURI(existData.toNumber());
+            setTicket(tokenURI);
+          }
+          catch (e) {
+            console.log(e);
+          }
         }
 
-        if (data.toNumber() === 0 && existData.toNumber() >= 1) {
-          setBurned(true);
-        }
+        setMinted(minted);
+        setBurned(burned);
+        
+        
+
       } catch (err) {
         console.log(err);
-        store.addNotification({
-          title: "Error!",
-          message: "Unable to retrieve information for address.",
-          type: "danger",
-          insert: "bottom",
-          container: "top-left",
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 3000,
-            onScreen: true
-          }
-        })
+        connectAccountError()
       }
 
       setAccount(await signer.getAddress());
@@ -101,101 +96,37 @@ const NFT = () => {
       const signer = provider.getSigner()
       const contract = new ethers.Contract(ticketAddress, AlinedTicket.abi, provider).connect(signer)
       const address = await signer.getAddress();
+      setLoading(true)
       try {
         const tokenID = await contract.tokenIDOwnedByAddress(address);
         const transaction = await contract.burn(tokenID);
         await transaction.wait()
-        store.addNotification({
-          title: "Success!",
-          message: "Burned ticket. Message to get free food.",
-          type: "success",
-          insert: "bottom",
-          container: "bottom-right",
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 3000,
-            onScreen: true
-          }
-        })
-        setMinted(false);
+        burnTicketSuccess();
         setBurned(true);
       } catch(e){
-        store.addNotification({
-          title: "Error!",
-          message: "Unable to burn ticket.",
-          type: "error",
-          insert: "bottom",
-          container: "bottom-right",
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 3000,
-            onScreen: true
-          }
-        })
+        burnTicketError();
       }
+      setLoading(false)
     }
 
-    async function mintTicket() {
+    const mintTicket = async () => {
       if (typeof window.ethereum !== 'undefined'){
-        
         await requestAccount()
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner()
         const contract = new ethers.Contract(ticketAddress, AlinedTicket.abi, provider).connect(signer)
         const address = await signer.getAddress();
+        setLoading(true)
         try {
           const transaction = await contract.mint(address)
-
           await transaction.wait()
           setMinted(true)
-          store.addNotification({
-            title: "Success",
-            message: "Minted ticket!",
-            type: "success",
-            insert: "bottom",
-            container: "bottom-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 3000,
-              onScreen: true
-            }
-          })
+          mintTicketSuccess()
         } catch(e){
-          store.addNotification({
-            title: "Error",
-            message: "Unable to mint ticket. Either you already have a ticket or you will need to try again.",
-            type: "error",
-            insert: "bottom",
-            container: "bottom-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 3000,
-              onScreen: true
-            }
-          })
+          mintTicketError()
         }  
+        setLoading(false)
       }
-    }
-
-    const determineButton = () : buttonJSON => {
- 
-      if (account) {
-        if (minted) {
-          if (burned) {
-            return {text: "Ticket has been minted and burned.", style: styles.buttonDisabled, disabled: true, onClick: null} 
-          } else {
-            return {text: "Burn Ticket", style: styles.button, disabled: false, onClick: burnTicket};
-          }
-        } else  {
-          return {text: "Mint Ticket", style: styles.button, disabled: false, onClick: mintTicket};
-        }
-      }
-
-      return {text: "Connect Wallet", style: styles.button, disabled: false, onClick: connectAccount};
     }
 
     return (
@@ -244,44 +175,82 @@ const NFT = () => {
           </ContainerLeft>
           <ContainerRight>
             <TextBox>
-              <TextBoxSubHeader title="Step 1">
-                  <Emoji label="step1" emoji="📜"/>
+              <TextBoxSubHeader title="Step 1 - Download MetaMask">
+                <CheckBox checked={metaMaskDownloaded}/>
               </TextBoxSubHeader>
-              <TextBoxUnorderedList>
+              {!metaMaskDownloaded && 
+                <TextBoxUnorderedList>
                   <TextBoxListItem>
-                    <input type="checkbox" id="step1" name="step1" value="Bike"/>
-                    <label htmlFor="step1">Download Metamask</label>
+                  MetaMask is a browser extension that let's you interact with Ethereum dapps and is an interface to view your wallet.  
                   </TextBoxListItem>
-              </TextBoxUnorderedList>
+                  <SVG link="https://metamask.io/">
+                    <MetaMaskSVG width={40} height={40} viewBox="0 0 40 40"/>
+                  </SVG>
+                </TextBoxUnorderedList>
+              }
            </TextBox>
            <TextBox>
-              <TextBoxSubHeader title="Step 1">
-                  <Emoji label="step1" emoji="📜"/>
+              <TextBoxSubHeader title="Step 2 - Connect to Metamask">
+                <CheckBox checked={account}/>
               </TextBoxSubHeader>
               <TextBoxUnorderedList>
-                  <TextBoxListItem>
-                    <input type="checkbox" id="step2" name="step2" value="Bike"/>
-                    <label htmlFor="step1">Connect to Metamask</label>
-                    <div className={styles.wallet}>
-                      <button className={determineButton().style} disabled={determineButton().disabled} onClick={determineButton().onClick}>
-                        {loading && <div className={styles.spinner}></div>}
-                        {determineButton().text}
-                      </button> 
-                    </div>
-                  </TextBoxListItem>
+                {!account && 
+                  <div className={styles.wallet}>
+                    <button className={styles.button} onClick={connectAccount}>
+                      {loading && <div className={styles.spinner}></div>}
+                      Connect Wallet
+                    </button> 
+                  </div>
+                }
               </TextBoxUnorderedList>
            </TextBox>
             <TextBox>
-              <TextBoxSubHeader title="Step 3">
-                  <Emoji label="step3" emoji="📜"/>
+              <TextBoxSubHeader title="Step 3 - Mint Ticket">
+                <CheckBox checked={account && minted}/>
               </TextBoxSubHeader>
               <TextBoxUnorderedList>
-                  <TextBoxListItem>
-                    <input type="checkbox" id="step3" name="step3" value="Bike"/>
-                    <label htmlFor="step2">Mint Ticket</label>
-                  </TextBoxListItem>
+                {account && !minted &&
+                  <div className={styles.wallet}>
+                    <button className={styles.button} onClick={mintTicket} disabled={loading}>
+                      {loading && <div className={styles.spinner}></div>}
+                      Mint Ticket
+                    </button> 
+                  </div>
+                }
+                {account && minted &&
+                  <>
+                    <TextBoxListItem>
+                      You have a minted ticket! Examine it, hold it, or burn it!
+                    </TextBoxListItem>
+                    <TextBoxListItem>
+                      IPFS JSON Hash - <a href={ticket} rel="noreferrer" target="_blank">Link</a>
+                    </TextBoxListItem>
+                  </>
+                }
               </TextBoxUnorderedList>
-           </TextBox>  
+           </TextBox> 
+           <TextBox>
+              <TextBoxSubHeader title="Step 4 - Burn Ticket">
+                <CheckBox checked={account && minted && burned}/>
+              </TextBoxSubHeader>
+              <TextBoxUnorderedList>
+                {account && minted && !burned && 
+                  <div className={styles.wallet}>
+                    <button className={styles.button} onClick={burnTicket} disabled={loading}>
+                      {loading && <div className={styles.spinner}></div>}
+                      Burn Ticket
+                    </button> 
+                  </div>
+                }
+                {account && minted && burned &&
+                  <>
+                    <TextBoxListItem>
+                      You have burned a ticket! Contact me for more details!
+                    </TextBoxListItem>
+                 </>
+                }
+              </TextBoxUnorderedList>
+           </TextBox>   
           </ContainerRight>     
         </SplitContainer>
     )

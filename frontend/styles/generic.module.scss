@@ -47,6 +47,23 @@ $dim: 18;
     }
 }
 
+
+.svg {
+    display: flex;
+    align-items: center;
+    margin: 0 .5rem;
+
+    svg {
+        transition: all .2s ease;
+        
+        cursor: pointer;
+        &:hover {
+            fill: var(--hover-color);
+            transform: scale(1.1);
+        }
+    }
+}
+
 .responsiveImageContainer{
     width: 100%;
     max-width: 500px;
@@ -64,6 +81,9 @@ $dim: 18;
 }
 
 .button, .buttonDisabled {
+
+    display: flex;
+    align-items: center;
     cursor: pointer;
     --tw-bg-opacity: .75;
     background-color: var(--bg-green);
@@ -77,6 +97,10 @@ $dim: 18;
 
     &:hover {
        background-color:rgb(46,139,87);
+    }
+
+    .spinner {
+        margin-right: .5rem;
     }
 }
 .buttonDisabled {
@@ -110,7 +134,44 @@ $dim: 18;
 }
 
 .subHeader{
+    display: flex;
+    align-items: center;
     margin: .5rem;
+
+    .subHeaderTitle{
+        margin-left: .5rem;
+    }
+}
+
+.checkBox {
+    &:disabled {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+.tiltableImage {
+    & > div {
+      display: block !important;
+    }
+  
+    border-radius: .5rem;
+    overflow: hidden;
+    box-shadow: 0 8px 30px -6px rgb(51 51 51 / 70%), 0 30px 50px 0 rgb(51 51 51 / 20%);
+}
+  
+.tiltableImage::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    -webkit-transform: translateZ(-50px);
+    transform: translateZ(-50px);
+    -webkit-transition: .3s;
+    transition: .3s;
 }
 
 .spinner {
@@ -136,7 +197,7 @@ $dim: 18;
     border-bottom:5px solid transparent;
     border-right:5px solid transparent;
     border-radius:100%;
- }
+}
 
  @keyframes rotation {
     from {transform: rotate(0deg);}

@@ -1,21 +1,11 @@
 import React from 'react';
 import styles from '../styles/Footer.module.scss';
+import SVG from './SVG';
+
 const Github = require('../public/github.svg');
 const Twitter = require('../public/twitter.svg');
 const Linkedin = require('../public/linkedin.svg');
 const Medium = require('../public/medium.svg');
-
-const SVG = ({children, link}) => {
-
-    return (
-        <a href={link} rel="noreferrer" target="_blank">
-            <div className={styles.svg}>
-                {children}
-            </div>
-        </a>
-        
-    )
-}
 
 const Footer = () => (
     <footer className={styles.footer}>

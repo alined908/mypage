@@ -21,7 +21,7 @@ const posts : PostProps[] = [
         date: new Date(2021, 6, 20), 
         link: "https://notalined.medium.com/thorchain-overview-216d810d8e03", 
         image: '/thorchain.jpg', 
-        description: "What is THORChain? How does it work? Why do we need it?",
+        description: "What is THORChain? How does it work? Why is it important?",
         duration: 7
     }
 ]
