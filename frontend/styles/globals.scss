@@ -2,7 +2,7 @@
   --shadow-s: 0 .125rem .25rem rgba(0,0,0,.075);
   --shadow-m: 0 .5rem 1rem rgba(0,0,0,.15);
   --bg-green: #10b981;
-  --hover-color: lightseagreen;
+  --hover-color:#191970;
 }
 
 html,
@@ -11,7 +11,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background: linear-gradient(rgb(247, 250, 255), #FFFFFF);
+  background: linear-gradient(#ffe7ea, #FFFFFF);
 }
 
 a {

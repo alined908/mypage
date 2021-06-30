@@ -5,19 +5,32 @@ import genericStyles from '../styles/generic.module.scss';
 import nftStyles from '../styles/nft.module.scss';
 import AlinedTicket from '../artifacts/AlinedTicket.json';
 import { store } from 'react-notifications-component';
+import Emoji from '../components/Emoji';
+import { TextBox, TextBoxSubHeader, TextBoxUnorderedList, TextBoxListItem } from '../components/TextBox';
+import { SplitContainer, ContainerLeft, ContainerRight } from '../components/SplitContainer';
 
 const ticketAddress = "0x192d6AD08d70c9a94BFF20763ca08D01D23DD8e6";
 const styles = {...genericStyles, ...nftStyles};
 
 declare let window: any;
 
+interface buttonJSON {
+  text: string
+  style: string
+  disabled: boolean
+  onClick: () => void
+}
+
 const NFT = () => {
     const [account, setAccount] = useState(null);
     const [minted, setMinted] = useState(false);
     const [burned, setBurned] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [metaMaskDownloaded, setMetaMaskDownloaded] = useState(false);
 
     useEffect(() => {
-      requestAccount();
+      checkMetaMaskDownloaded();
+      //requestAccount();
       //checkConnected();
     }, [])
 
@@ -37,6 +50,10 @@ const NFT = () => {
       }
     }
 
+    const checkMetaMaskDownloaded = () : void => {
+      setMetaMaskDownloaded(window.ethereum.isMetaMask);
+    }
+
     // Access to Metamask account
     async function requestAccount() {
       await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -50,7 +67,7 @@ const NFT = () => {
       const contract = new ethers.Contract(ticketAddress, AlinedTicket.abi, provider)
       const address = await signer.getAddress();
       try {
-        const data = await contract.balanceOf(address)
+        const data = await contract.balanceOf(address);
         const existData = await contract.tokenIDOwnedByAddress(address);
         if (data.toNumber() === 1 || existData.toNumber() >= 1){
           setMinted(true);
@@ -60,12 +77,13 @@ const NFT = () => {
           setBurned(true);
         }
       } catch (err) {
+        console.log(err);
         store.addNotification({
           title: "Error!",
           message: "Unable to retrieve information for address.",
-          type: "error",
+          type: "danger",
           insert: "bottom",
-          container: "bottom-right",
+          container: "top-left",
           animationIn: ["animate__animated", "animate__fadeIn"],
           animationOut: ["animate__animated", "animate__fadeOut"],
           dismiss: {
@@ -129,6 +147,7 @@ const NFT = () => {
         const address = await signer.getAddress();
         try {
           const transaction = await contract.mint(address)
+
           await transaction.wait()
           setMinted(true)
           store.addNotification({
@@ -162,70 +181,110 @@ const NFT = () => {
       }
     }
 
+    const determineButton = () : buttonJSON => {
+ 
+      if (account) {
+        if (minted) {
+          if (burned) {
+            return {text: "Ticket has been minted and burned.", style: styles.buttonDisabled, disabled: true, onClick: null} 
+          } else {
+            return {text: "Burn Ticket", style: styles.button, disabled: false, onClick: burnTicket};
+          }
+        } else  {
+          return {text: "Mint Ticket", style: styles.button, disabled: false, onClick: mintTicket};
+        }
+      }
+
+      return {text: "Connect Wallet", style: styles.button, disabled: false, onClick: connectAccount};
+    }
+
     return (
-        <div className={styles.container}>
-            <div className={styles.inner}>   
-                <div className={styles.header}>
-                    Golden Tickets
-                </div>
-                <div className={`${styles.responsiveImageContainer} ${styles.ticket}`}>
-                  <Image 
-                    src={"https://gateway.pinata.cloud/ipfs/QmbwZi3Uw3Pwh4eiMibWycc9rufxd5bEYqujaoiws9ZEvc"}
-                    alt="Golden Ticket"
-                    className={styles.responsiveImage}
-                    layout='fill'
-                  />
-                </div>
-                <div className={styles.nftblurb}>
-                    <div>
-                      <div className={styles.text}>
-                        Trying something that I think could be fun. 
-                        I've created a set of digital tickets (max circulating supply 50) with each ticket able to be burned in order to redeem something of value irl. Anyone can mint a token if they connect a wallet and pay a bit of gas to send the token to your wallet. Ask me if you need help with the process! 
-                      </div>
-                      <div className={styles.text}>
-                        Rules
-                        <hr/>
-                        1. Rinkeby account needed with ether.
-                        <br/>
-                        2. Each person can hold only one ticket at a time. 
-                        <br/>
-                        3. Each person can only redeem one ticket.
-                      </div>
-                      <div className={styles.text}>
-                        P.S. 
-                        <hr/>
-                        It's possible the set of tickets is non-fungible in that some tickets with different ids may have different monetary values or different prizes. (like yelp $, $$, $$$, $$$$). 
-                      </div>
-                    </div>
-                    <div className={styles.wallet}>
-                      {account ? 
-                        (minted ? 
-                          (burned ?
-                            <button className={styles.buttonDisabled} disabled={true}>
-                              Ticket has been minted and burned.
-                            </button> 
-                            :
-                            <button className={styles.button} onClick={burnTicket}>
-                              Burn Ticket
-                            </button> 
-                          )
-                          : 
-                          <button className={styles.button} onClick={mintTicket}>
-                            Mint Ticket
-                          </button> 
-                        )
-                        :
-                        <div className={styles.button} onClick={connectAccount}>
-                          Connect Wallet
-                        </div>
-                      }
-                  </div>
-                </div>
+        <SplitContainer>
+          <ContainerLeft>   
+            <div className={`${styles.textBox} ${styles.responsiveImageContainer} ${styles.ticket}`}>
+              <Image 
+                src={"https://gateway.pinata.cloud/ipfs/QmbwZi3Uw3Pwh4eiMibWycc9rufxd5bEYqujaoiws9ZEvc"}
+                alt="Golden Ticket"
+                className={styles.responsiveImage}
+                layout='fill'
+              />
             </div>
-            
-        </div>
+            <TextBox>
+              <TextBoxSubHeader title="Info">
+                  <Emoji label="info" emoji="⚠️"/>
+              </TextBoxSubHeader>
+              <TextBoxUnorderedList>
+                  <TextBoxListItem>
+                    A set of digital tickets that can be redeemed for something in real life. 
+                  </TextBoxListItem>
+                  <TextBoxListItem>
+                    It's possible the set of tickets is non-fungible in that some tickets may have different prizes or monetary values.
+                  </TextBoxListItem>
+              </TextBoxUnorderedList>
+           </TextBox>
+           <TextBox>
+              <TextBoxSubHeader title="Rules">
+                  <Emoji label="rules" emoji="📜"/>
+              </TextBoxSubHeader>
+              <TextBoxUnorderedList>
+                  <TextBoxListItem>
+                    Rinkeby account needed with ether.
+                  </TextBoxListItem>
+                  <TextBoxListItem>
+                    Each person can hold only one ticket at a time. 
+                  </TextBoxListItem>
+                  <TextBoxListItem>
+                    Each person can only redeem one ticket.
+                  </TextBoxListItem>
+                  <TextBoxListItem>
+                    Max supply of 50 tickets.
+                  </TextBoxListItem>
+              </TextBoxUnorderedList>
+           </TextBox>
+          </ContainerLeft>
+          <ContainerRight>
+            <TextBox>
+              <TextBoxSubHeader title="Step 1">
+                  <Emoji label="step1" emoji="📜"/>
+              </TextBoxSubHeader>
+              <TextBoxUnorderedList>
+                  <TextBoxListItem>
+                    <input type="checkbox" id="step1" name="step1" value="Bike"/>
+                    <label htmlFor="step1">Download Metamask</label>
+                  </TextBoxListItem>
+              </TextBoxUnorderedList>
+           </TextBox>
+           <TextBox>
+              <TextBoxSubHeader title="Step 1">
+                  <Emoji label="step1" emoji="📜"/>
+              </TextBoxSubHeader>
+              <TextBoxUnorderedList>
+                  <TextBoxListItem>
+                    <input type="checkbox" id="step2" name="step2" value="Bike"/>
+                    <label htmlFor="step1">Connect to Metamask</label>
+                    <div className={styles.wallet}>
+                      <button className={determineButton().style} disabled={determineButton().disabled} onClick={determineButton().onClick}>
+                        {loading && <div className={styles.spinner}></div>}
+                        {determineButton().text}
+                      </button> 
+                    </div>
+                  </TextBoxListItem>
+              </TextBoxUnorderedList>
+           </TextBox>
+            <TextBox>
+              <TextBoxSubHeader title="Step 3">
+                  <Emoji label="step3" emoji="📜"/>
+              </TextBoxSubHeader>
+              <TextBoxUnorderedList>
+                  <TextBoxListItem>
+                    <input type="checkbox" id="step3" name="step3" value="Bike"/>
+                    <label htmlFor="step2">Mint Ticket</label>
+                  </TextBoxListItem>
+              </TextBoxUnorderedList>
+           </TextBox>  
+          </ContainerRight>     
+        </SplitContainer>
     )
-    
 }
 
 export default NFT

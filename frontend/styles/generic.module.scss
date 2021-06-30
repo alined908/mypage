@@ -1,6 +1,29 @@
+@use 'sass:math';
+$dim: 18;
+
 .container{
     padding: 2rem 3rem;
     margin-top: -1rem;
+}
+
+.splitContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 2rem;
+    max-width: 1200px;
+}
+
+.leftGrid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.rightGrid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
 }
 
 .inner{
@@ -15,48 +38,13 @@
     font-weight: 500;
 }
 
-.blurb {
-    max-width: 600px;
-    font-size: 1rem;
+.externalLink {
+    color: darkblue;
     font-weight: 500;
-    text-align: center;
-    line-height: 2.1rem;
-}
-
-.post {
-    background-color: white;
-    border-radius: .5rem;
-    box-shadow: var(--shadow-m);
-    overflow: hidden;
-    transition: all .25s ease;
-    text-align: center;
-    max-width: 320px;
 
     &:hover{
-        transform: translateY(-10px);
+        cursor: pointer;
     }
-}
-
-.postInfo {
-    display: flex;
-    flex-direction: column;
-    padding: .5rem 1rem;
-    align-items: center;
-    justify-content: center;
-}
-
-.postDate {
-    font-size: .9rem;
-}
-
-.postDescription{
-    color: rgb(170, 170, 170);
-    font-size: .9rem;
-}
-
-.postTitle{
-    font-size: 1.25rem;
-    font-weight: bold;
 }
 
 .responsiveImageContainer{
@@ -99,10 +87,74 @@
     }
 }
 
-.text {
-    margin-bottom: 1rem;
+.textBox {
+    padding: .5rem 1rem;
+    box-shadow: var(--shadow-m);
+    background-color: white;
+    border-radius: .25rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid lightgrey;
+
+    h2 {
+        margin: 1rem 0;
+    }
+
+    ul {
+        padding-inline-start: 35px;
+
+        li {
+            margin: .25rem 0;
+        }
+    }
+    
 }
 
+.subHeader{
+    margin: .5rem;
+}
+
+.spinner {
+    height: 22px;
+    width: 22px;
+    margin: -(math.div($dim, 2)) 0 0 -(math.div($dim, 2));
+    -webkit-animation: rotation 1s infinite linear;
+    animation: rotation 1s infinite linear;
+    border:6px solid rgba(0,0,0,.2);
+    border-radius: 100%;
+}
+
+.spinner:before {
+    content:"";
+    display:block;
+    position:absolute;
+    left:-5px;
+    top:-5px;
+    height:100%;
+    width:100%;
+    border-top:5px solid rgba(0,0,0,.8);
+    border-left:5px solid transparent;
+    border-bottom:5px solid transparent;
+    border-right:5px solid transparent;
+    border-radius:100%;
+ }
+
+ @keyframes rotation {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(359deg);}
+}
+
+@media only screen and (max-width: 1200px) {
+    .splitContainer{
+        margin: 0 2rem;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .splitContainer{
+        grid-template-columns: 1fr;
+        margin: 1rem;
+    }
+}
 
 @media only screen and (max-width: 700px) {
     .container {

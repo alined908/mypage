@@ -1,7 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
 import moment from 'moment';
-import styles from '../styles/generic.module.scss';
+import postStyles from '../styles/post.module.scss';
+import genericStyles from '../styles/generic.module.scss';
+
+const styles = {...genericStyles, ...postStyles};
 
 type PostProps = {
     title: string
@@ -9,18 +12,22 @@ type PostProps = {
     date: Date,
     image: string
     description: string
+    duration: number
 }
 
 const posts : PostProps[] = [
     {
-        title: "THORChain Overview", 
+        title: "⚡ THORChain Overview", 
         date: new Date(2021, 6, 20), 
         link: "https://notalined.medium.com/thorchain-overview-216d810d8e03", 
         image: '/thorchain.jpg', 
-        description: "An overview on THORChain. What is it? How does it work? Diving deep into cross chain exchanges."}
+        description: "What is THORChain? How does it work? Why do we need it?",
+        duration: 7
+    }
 ]
 
-const Post = ({title, link, date, image, description} : PostProps) => {
+const Post = ({title, link, date, image, description, duration} : PostProps) : JSX.Element => {
+    
     return (
         <a href={link} rel="noreferrer" target="_blank">
             <div className={styles.post}>
@@ -31,12 +38,21 @@ const Post = ({title, link, date, image, description} : PostProps) => {
                     height={210}
                 />
                 <div className={styles.postInfo}>
-                    <div className={styles.postDate}>
-                        {moment(date).format('YYYY-MM-DD')}
-                    </div>
-                    <div className={styles.postTitle}>
+                    <h2 className={styles.postTitle}>
                         {title}
+                    </h2>
+                    <div className={styles.postTime}>
+                        <div className={styles.postDate}>
+                            {moment(date).format('MMM Do YYYY')}
+                        </div>
+                        <div className={styles.separator}>
+                            •
+                        </div>
+                        <div>
+                            {duration} min read
+                        </div>
                     </div>
+                    
                     <div className={styles.postDescription}>
                         {description}
                     </div>
@@ -47,21 +63,24 @@ const Post = ({title, link, date, image, description} : PostProps) => {
     )
 }
 
-const Blog = () => {
+const Blog = () : JSX.Element => {
 
     return (
         <div className={styles.container}>
             <div className={styles.inner}>   
-                <div className={styles.header}>
-                    
-                </div>
-                <div className={styles.blurb}>
-                   {posts.map((post) => 
-                       <Post title={post.title} link={post.link} image={post.image} date={post.date} description={post.description}></Post>
-                   )}
-                </div>
+
+                {posts.map((post) => 
+                    <Post 
+                        title={post.title} 
+                        link={post.link} 
+                        image={post.image} 
+                        date={post.date} 
+                        description={post.description} 
+                        duration={post.duration}
+                    />
+                )}
+                
             </div>
-           
         </div>
     )
 }
