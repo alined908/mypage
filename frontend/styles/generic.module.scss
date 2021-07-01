@@ -10,20 +10,12 @@ $dim: 18;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 2rem;
-    max-width: 1200px;
+    max-width: 90%;
 }
 
-.leftGrid {
+.leftGrid, .rightGrid {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-}
-
-.rightGrid {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    
 }
 
 .inner{

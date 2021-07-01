@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import moment from 'moment';
+import Head from 'next/head';
 import postStyles from '../styles/post.module.scss';
 import genericStyles from '../styles/generic.module.scss';
 
@@ -66,22 +67,28 @@ const Post = ({title, link, date, image, description, duration} : PostProps) : J
 const Blog = () : JSX.Element => {
 
     return (
-        <div className={styles.container}>
-            <div className={styles.inner}>   
+        <>
+            <Head>
+                <title>Blog</title>
+                <meta name="description" content="Personal Website" />
+            </Head>
+            <div className={styles.container}>
+                <div className={styles.inner}>   
 
-                {posts.map((post) => 
-                    <Post 
-                        title={post.title} 
-                        link={post.link} 
-                        image={post.image} 
-                        date={post.date} 
-                        description={post.description} 
-                        duration={post.duration}
-                    />
-                )}
-                
+                    {posts.map((post) => 
+                        <Post 
+                            title={post.title} 
+                            link={post.link} 
+                            image={post.image} 
+                            date={post.date} 
+                            description={post.description} 
+                            duration={post.duration}
+                        />
+                    )}
+                    
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 

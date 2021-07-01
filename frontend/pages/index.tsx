@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <>
       <Head>
-        <title>alined.mirror.xyz</title>
+        <title>Alined</title>
         <meta name="description" content="Personal Website" />
       </Head>
 

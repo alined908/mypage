@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {ethers} from 'ethers';
 import Image from 'next/image';
+import Head from 'next/head';
 import genericStyles from '../styles/generic.module.scss';
 import nftStyles from '../styles/nft.module.scss';
 import AlinedTicket from '../artifacts/AlinedTicket.json';
@@ -147,6 +148,11 @@ const NFT = () => {
     }
 
     return (
+      <>
+        <Head>
+          <title>Golden Ticket</title>
+          <meta name="description" content="Personal Website" />
+        </Head>
         <SplitContainer>
           <ContainerLeft>   
             <div className={`${styles.textBox} ${styles.responsiveImageContainer} ${styles.ticket}`}>
@@ -270,6 +276,7 @@ const NFT = () => {
            </TextBox>   
           </ContainerRight>     
         </SplitContainer>
+      </>
     )
 }
 
