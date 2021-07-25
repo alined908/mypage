@@ -1,4 +1,9 @@
+.posts {
+    display: flex;
+}
+
 .post {
+    margin: 2rem;
     background-color: white;
     border: 1px solid lightgrey;
     border-radius: .5rem;
@@ -41,4 +46,19 @@
 
 .postTitle{
     margin: .5rem 0;
+}
+
+@media only screen and (max-width: 900px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .posts {
+        flex-direction: column;
+    }
+
+    .post {
+        min-width: 320px;
+        margin: 2rem 0;
+    }
 }

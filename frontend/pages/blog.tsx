@@ -2,10 +2,11 @@ import React from 'react';
 import Image from 'next/image';
 import moment from 'moment';
 import Head from 'next/head';
-import postStyles from '../styles/post.module.scss';
+import blogStyles from '../styles/blog.module.scss';
 import genericStyles from '../styles/generic.module.scss';
+import posts from '../constants/posts';
 
-const styles = {...genericStyles, ...postStyles};
+const styles = {...genericStyles, ...blogStyles};
 
 type PostProps = {
     title: string
@@ -16,17 +17,6 @@ type PostProps = {
     duration: number
 }
 
-const posts : PostProps[] = [
-    {
-        title: "⚡ THORChain Overview", 
-        date: new Date(2021, 6, 20), 
-        link: "https://notalined.medium.com/thorchain-overview-216d810d8e03", 
-        image: '/thorchain.jpg', 
-        description: "What is THORChain? How does it work? Why is it important?",
-        duration: 7
-    }
-]
-
 const Post = ({title, link, date, image, description, duration} : PostProps) : JSX.Element => {
     
     return (
@@ -34,7 +24,7 @@ const Post = ({title, link, date, image, description, duration} : PostProps) : J
             <div className={styles.post}>
                 <Image
                     src={image}
-                    alt="THORChain"
+                    alt={title}
                     width={350}
                     height={210}
                 />
@@ -73,8 +63,7 @@ const Blog = () : JSX.Element => {
                 <meta name="description" content="Personal Website" />
             </Head>
             <div className={styles.container}>
-                <div className={styles.inner}>   
-
+                <div className={styles.posts}>   
                     {posts.map((post) => 
                         <Post 
                             title={post.title} 
