@@ -10,7 +10,7 @@ const Medium = require('../public/medium.svg');
 const Footer = () => (
     <footer className={styles.footer}>
         <div className={styles.links}>
-            <SVG link="https://twitter.com/_alined_">
+            <SVG link="https://twitter.com/alinedxyz">
                 <Twitter width={23} height={23} viewBox="0 0 24 19.5"/>
             </SVG>
             <SVG link="https://github.com/alined908">
