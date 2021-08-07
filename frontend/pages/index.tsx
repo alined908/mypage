@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head'
-import Image from 'next/image';
 import styles from '../styles/Home.module.scss'
-import TiltableImage from '../components/TiltableImage';
+import dynamic from 'next/dynamic'
+
+const DynamicDeck = dynamic(
+  () => import('../components/Deck'),
+  { ssr: false }
+)
+
+const cards = [
+  {src: '/me.jpg', alt: 'Pic of me', name: "Daniel"},
+  {src: '/15623mask.jpeg', alt: 'Mask #15623', name: "Mask #15623"},
+  {src: '/punk7171.png', akt: "Punk #7171", name: "Punk #7171"}
+]
 
 const Home = () => {
 
@@ -15,29 +25,21 @@ const Home = () => {
 
       <div className={styles.container}>
         <div className={styles.intro}>
-          <div className={styles.avatar}>
-            <TiltableImage>
-              <Image
-                src="/me.jpg"
-                alt="Pic of me"
-                width={300}
-                height={400}
-              />
-            </TiltableImage>
-          </div>
-          <div className={styles.welcome}>
-            <div className={styles.hello}>
-              Hi! I'm Daniel.
-            </div>
-            <div className={styles.hello}>
-              Welcome to my corner of the internet.
-            </div>
-            <div className={styles.contact}>
-              DM on Twitter if you'd like to talk.
-            </div>
+          <div className={styles.avatar} id="avatar">
+            <DynamicDeck cards={cards}/>
           </div>
         </div>
+        <div className={styles.welcome}>
+            <div className={styles.hello}>
+              Hey! I'm Daniel.
+            </div>
+            <div>
+              Welcome to my site.
+            </div>
+          </div>
       </div>
+
+      
     </>
   )
 }

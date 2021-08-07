@@ -7,6 +7,7 @@ function initTilt(elem: HTMLDivElement) {
       'max-glare': 0.1,
       glare: true,
       max: 15,
+      reverse: true,
       "full-page-listening":  true,
     });
   }
@@ -21,9 +22,9 @@ const TiltableImage = (props) => {
     }, [ref])
 
     return (
-        <div className={styles.tiltableImage} ref={ref}>
+      <div className={styles.tiltableImage} ref={ref}>
         {children}
-        </div>
+      </div>
     )
 }
 
