@@ -24,10 +24,8 @@ const Home = () => {
       </Head>
 
       <div className={styles.container}>
-        <div className={styles.intro}>
-          <div className={styles.avatar} id="avatar">
-            <DynamicDeck cards={cards}/>
-          </div>
+        <div className={styles.avatar} id="avatar">
+          <DynamicDeck cards={cards}/>
         </div>
         <div className={styles.welcome}>
             <div className={styles.hello}>

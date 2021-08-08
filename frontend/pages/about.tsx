@@ -92,24 +92,7 @@ const About = () : JSX.Element => {
                                 My <a className={styles.externalLink} href='https://liquipedia.net/overwatch/Alined' rel="noreferrer" target="_blank">liquipedia</a> :()
                             </TextBoxListItem>
                             <TextBoxListItem>
-                                Competitive Ladders 
-                                <ul>
-                                    <li>
-                                        Diamond 1 S3 in League of Legends
-                                    </li>
-                                    <li>
-                                        ESEA Open 3rd Place in CSGO
-                                    </li>
-                                    <li>
-                                        Top 100 Legend in Hearthstone
-                                    </li>
-                                    <li>
-                                        Top 10 multiple accounts in Overwatch
-                                    </li>
-                                    <li>
-                                        2x Challenger in Teamfight Tactics
-                                    </li>
-                                </ul>
+                                Competitive Ladders - Diamond 1 S3 in League of Legends, ESEA Open 3rd Place in CSGO, Top 100 Legend in Hearthstone, Top 10 multiple accounts in Overwatch, 2x Challenger in Teamfight Tactics
                             </TextBoxListItem>
                         </TextBoxUnorderedList>
                     </TextBox>
