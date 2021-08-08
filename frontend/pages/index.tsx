@@ -14,7 +14,17 @@ const cards = [
   {src: '/punk7171.png', akt: "Punk #7171", name: "Punk #7171"}
 ]
 
+const shuffle = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array
+}
+
 const Home = () => {
+  //Shuffle deck to randomize appearance order
+  const shuffledCards = shuffle(cards);
 
   return (
     <>
@@ -25,7 +35,7 @@ const Home = () => {
 
       <div className={styles.container}>
         <div className={styles.avatar} id="avatar">
-          <DynamicDeck cards={cards}/>
+          <DynamicDeck shuffledCards={shuffledCards}/>
         </div>
         <div className={styles.welcome}>
             <div className={styles.hello}>
