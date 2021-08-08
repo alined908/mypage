@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useSprings, animated, interpolate} from 'react-spring'
 import { useGesture } from 'react-use-gesture';
 
-
 const toParams = (i) => ({x: 0, y: i * -10, scale: 1, rotation: -10 + Math.random() * 20, delay: i * 100})
 const fromParams = (i) => ({x: 0, y: -300 * i, rotation: 0, scale: 1.5})
 const trans = (r, s) => `perspective(1500px) rotateX(0deg) rotateY(${r / 10}deg) rotateZ(${r}deg) scale(${s})`;
@@ -29,7 +28,7 @@ const Deck = ({shuffledCards, setCurrentCard}) => {
   }, [cards])
 
   //Create draggable animated.div 
-  const bind = useGesture(({ args: [index], down, delta: [xDelta, yDelta], direction: [xDir], distance, velocity }) => {
+  const bind = useGesture(({ args: [index], down, delta: [xDelta, yDelta], direction: [xDir], distance, velocity, delay }) => {
     //Check if exceed speed threshold
     const speedTrigger = velocity > 0.2;
     //Check if user tapped
@@ -41,7 +40,7 @@ const Deck = ({shuffledCards, setCurrentCard}) => {
       used.add(index);
 
       if (used.size === cards.length) {
-        setCurrentCard({});
+        setCurrentCard(null);
       } else {
         let usedArray = [...used];
         let possIndex = [...Array(cards.length).keys()];
@@ -57,7 +56,7 @@ const Deck = ({shuffledCards, setCurrentCard}) => {
       const y = tapped && isUsed ? (window.innerHeight * Math.random() * randomizeDirection()) : down ? yDelta : currentSpring * -10;
       const rotation = xDelta / 100 + (isUsed ? dir * 10 * velocity : 0)
       const scale = down ? 1.1 : 1
-      return {x, y, rotation, scale, delay: undefined, config: { friction: 50, tension: down ? 800 : isUsed ? 200 : 500 }}
+      return {x, y, rotation, scale, delay, config: { friction: 50, tension: down ? 800 : isUsed ? 200 : 500 }}
     })
     //If all cards used, then shuffle and reset
     if (!down && used.size === shuffledCards.length) {

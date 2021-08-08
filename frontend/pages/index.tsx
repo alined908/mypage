@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head'
 import styles from '../styles/Home.module.scss'
 import dynamic from 'next/dynamic'
+//@ts-ignore
+import {useSpring, animated} from 'react-spring';
 
 const DynamicDeck = dynamic(
   () => import('../components/Deck'),
   { ssr: false }
 )
 
-const cards = [
+interface Card {
+  src: string 
+  alt: string
+  name: string
+}
+
+const cards : Card[] = [
   {src: '/me.jpg', alt: 'Pic of me', name: "Daniel"},
   {src: '/15623mask.jpeg', alt: 'Mask #15623', name: "Mask #15623"},
-  {src: '/punk7171.png', akt: "Punk #7171", name: "Punk #7171"}
+  {src: '/punk7171.png', alt: "Punk #7171", name: "Punk #7171"},
+  {src: '/pudgy8826.png', alt: "Pudgy 8826", name: "Pudgy Penguin #8826"}
 ]
 
 const shuffle = (array) => {
@@ -26,7 +35,17 @@ const shuffledCards = shuffle(cards);
 
 const Home = () => {
   //Shuffle deck to randomize appearance order
-  const [currentCard, setCurrentCard] = useState(shuffledCards[shuffledCards.length - 1]);
+  const [currentCard, setCurrentCard] = useState<Card | null>(shuffledCards[shuffledCards.length - 1]);
+  const [introStatus, displayIntro] = useState(false);
+  const introProps = useSpring({
+      opacity: introStatus ? 1 : 0,
+      marginTop: introStatus ? 0 : -100
+  })
+  console.log(currentCard);
+
+  useEffect(() => {
+    setTimeout(() => displayIntro(true), 1200);
+  }, [])
 
   return (
     <>
@@ -40,12 +59,13 @@ const Home = () => {
           <DynamicDeck shuffledCards={shuffledCards} setCurrentCard={setCurrentCard}/>
         </div>
         <div className={styles.welcome}>
-          <div className={styles.hello}>
-            Hey! I'm {currentCard.name}.
-          </div>
-          <div>
-            Welcome to my site.
-          </div>
+          {introStatus && 
+            <animated.div style={introProps}>
+              <div className={styles.hello}>
+                Hi!  I'm {currentCard ? currentCard.name : "Alined"}.
+              </div>
+            </animated.div>
+          }
         </div>
       </div> 
     </>
