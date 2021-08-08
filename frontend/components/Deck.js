@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSprings, animated, interpolate} from 'react-spring'
 import { useGesture } from 'react-use-gesture';
 
@@ -8,15 +8,17 @@ const fromParams = (i) => ({x: 0, y: -300 * i, rotation: 0, scale: 1.5})
 const trans = (r, s) => `perspective(1500px) rotateX(0deg) rotateY(${r / 10}deg) rotateZ(${r}deg) scale(${s})`;
 const randomizeDirection = () => Math.random() < 0.5 ? 1 : -1;
 
-const randomizeDivs = () => {
-  let avatar = document.querySelector('#avatar');
-  for (let i = avatar.children.length; i >= 0; i--) {
-      avatar.appendChild(avatar.children[Math.random() * i | 0]);
+const shuffle = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
   }
+  return array
 }
 
 const Deck = ({shuffledCards}) => {
   
+  const [cards, setCards] = useState(shuffledCards);
   //Initialize a used Set to keep track of discarded cards
   const [used] = useState(() => new Set());
   //Initialize springs on cards, specifying to and from css params
@@ -47,9 +49,9 @@ const Deck = ({shuffledCards}) => {
     //If all cards used, then shuffle and reset
     if (!down && used.size === shuffledCards.length) {
       setTimeout(() => {
-        randomizeDivs();
+        setCards([...shuffle(shuffledCards)]);
         used.clear();
-        setSprings(i => toParams(i))
+        setSprings(i => toParams(i));
       }, 600);
     };
   })
@@ -60,7 +62,7 @@ const Deck = ({shuffledCards}) => {
         <animated.div key={i} style={{ transform: interpolate([x, y], (x, y) => `translate3d(${x}px,${y}px,0)`)}}>
           <animated.div 
             {...bind(i)} 
-            style={{ transform: interpolate([rotation, scale], trans), backgroundImage: `url(${shuffledCards[i].src})` }} 
+            style={{ transform: interpolate([rotation, scale], trans), backgroundImage: `url(${cards[i].src})` }} 
           />
         </animated.div>)
       )}
