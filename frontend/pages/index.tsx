@@ -22,9 +22,11 @@ const shuffle = (array) => {
   return array
 }
 
+const shuffledCards = shuffle(cards);
+
 const Home = () => {
   //Shuffle deck to randomize appearance order
-  const shuffledCards = shuffle(cards);
+  const [currentCard, setCurrentCard] = useState(shuffledCards[shuffledCards.length - 1]);
 
   return (
     <>
@@ -35,19 +37,17 @@ const Home = () => {
 
       <div className={styles.container}>
         <div className={styles.avatar} id="avatar">
-          <DynamicDeck shuffledCards={shuffledCards}/>
+          <DynamicDeck shuffledCards={shuffledCards} setCurrentCard={setCurrentCard}/>
         </div>
         <div className={styles.welcome}>
-            <div className={styles.hello}>
-              Hey! I'm Daniel.
-            </div>
-            <div>
-              Welcome to my site.
-            </div>
+          <div className={styles.hello}>
+            Hey! I'm {currentCard.name}.
           </div>
-      </div>
-
-      
+          <div>
+            Welcome to my site.
+          </div>
+        </div>
+      </div> 
     </>
   )
 }

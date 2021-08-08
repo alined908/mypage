@@ -16,13 +16,17 @@ const shuffle = (array) => {
   return array
 }
 
-const Deck = ({shuffledCards}) => {
+const Deck = ({shuffledCards, setCurrentCard}) => {
   
   const [cards, setCards] = useState(shuffledCards);
   //Initialize a used Set to keep track of discarded cards
   const [used] = useState(() => new Set());
   //Initialize springs on cards, specifying to and from css params
   const [springs, setSprings] = useSprings(shuffledCards.length, index => ({to: toParams(index), from: fromParams(index)}));
+
+  useEffect(() => {
+    setCurrentCard(cards[cards.length - 1]);
+  }, [cards])
 
   //Create draggable animated.div 
   const bind = useGesture(({ args: [index], down, delta: [xDelta, yDelta], direction: [xDir], distance, velocity }) => {
@@ -35,6 +39,15 @@ const Deck = ({shuffledCards}) => {
     //If let go & speed threshold met or tapped then add to used pile
     if (!down && (speedTrigger || tapped)) {
       used.add(index);
+
+      if (used.size === cards.length) {
+        setCurrentCard({});
+      } else {
+        let usedArray = [...used];
+        let possIndex = [...Array(cards.length).keys()];
+        let difference = possIndex.filter(e => !usedArray.find(a => e === a))
+        setCurrentCard(cards[Math.max(...difference)]);
+      }
     }
     //Control current spring movement + appearance
     setSprings(currentSpring => {
