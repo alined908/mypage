@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSprings, animated, interpolate} from 'react-spring'
 import { useGesture } from 'react-use-gesture';
 
-const toParams = (i) => ({x: 0, y: i * -10, scale: 1, rotation: -10 + Math.random() * 20, delay: i * 100})
-const fromParams = (i) => ({x: 0, y: -300 * i, rotation: 0, scale: 1.5})
+const toParams = (i) => ({x: 0, y: i * -10, scale: 1, rotation: -10 + Math.random() * 20})
+const fromParams = (i) => ({x: 0, y: -400 * i, rotation: 0, scale: 1.5})
 const trans = (r, s) => `perspective(1500px) rotateX(0deg) rotateY(${r / 10}deg) rotateZ(${r}deg) scale(${s})`;
 const randomizeDirection = () => Math.random() < 0.5 ? 1 : -1;
 

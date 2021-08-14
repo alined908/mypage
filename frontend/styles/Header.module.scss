@@ -14,13 +14,31 @@
     margin-left: 1rem;
 }
 
+.ensTag {
+    font-size: .7rem;
+    background-color: white;
+    font-weight: bold;
+    border-radius: .25rem;
+    padding: .2rem .25rem;
+    margin-right: .25rem;
+}
+
 .name {
     font-weight: 500;
     font-size: 1.15rem;
 }
 
 .link {
+    display: flex;
+    align-items: center;
+    margin-top: .2rem;
     font-size: 0.9rem;
+    transition: all .25s ease;
+
+    &:hover {
+        transform: scale(1.05);
+
+    }
 }
 
 .navigation{
@@ -81,6 +99,7 @@
         transition: all .25s ease;
     
         &:hover {
+            transform: scale(1.1);
             color: var(--hover-color);
         }
     }
@@ -92,6 +111,7 @@
     border-radius: 50%;
     overflow: hidden;
     transition: all .25s ease;
+    box-shadow: 2px 3px 10px rgba(0,0,0, .3);
 
     &:hover {
         cursor: pointer;

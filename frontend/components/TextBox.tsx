@@ -1,11 +1,49 @@
 import React from "react";
 import styles from '../styles/generic.module.scss';
+import { useSpring, animated } from "react-spring";
+import { Emoji } from "./Emoji";
+
+const ContainerTextBoxes = ({textBoxes, indexOffset = 0}) => {
+    return (
+        <>
+            {textBoxes.map((textBox, index) => 
+                <AnimatedLoadDiv position={index + indexOffset}>
+                    <TextBox>
+                        <TextBoxSubHeader title={textBox.title}>
+                            <Emoji label={textBox.emoji.label} icon={textBox.emoji.icon}/>
+                        </TextBoxSubHeader>
+                        <TextBoxUnorderedList>
+                            {textBox.listItems.map((listItem) => 
+                                <TextBoxListItem content={listItem}/>
+                            )}
+                        </TextBoxUnorderedList>
+                    </TextBox>
+                </AnimatedLoadDiv>
+                
+            )}
+        </>
+)}
+
+const AnimatedLoadDiv = ({children, position}) : JSX.Element => {
+
+    const props = useSpring({
+        from: {opacity: 0, transform: "translate(-50px, 0px)"}, 
+        to: {opacity: 1, transform: "translate(0, 0)"},
+        delay: (position + 1) * 125
+    })
+    
+    return (
+        <animated.div style={props}>
+            {children}
+        </animated.div>   
+    )
+}
 
 const TextBox = ({children}) : JSX.Element => {
     return (
         <div className={styles.textBox}>
             {children}
-        </div>   
+        </div>
     )
 }
 
@@ -29,14 +67,15 @@ const TextBoxUnorderedList = ({children}) : JSX.Element => {
         </ul>
     )   
 }
+
  
-const TextBoxListItem = ({children}) : JSX.Element => {
+const TextBoxListItem = ({children = null, content = null}) : JSX.Element => {
     return (
-        <li>
-            {children}
+        <li dangerouslySetInnerHTML={content ? {__html: content} : undefined}>
+           {children}
         </li>
     )
 }
 
 
-export {TextBox, TextBoxSubHeader, TextBoxUnorderedList, TextBoxListItem}
+export {TextBox, TextBoxSubHeader, TextBoxUnorderedList, TextBoxListItem, ContainerTextBoxes, AnimatedLoadDiv}

@@ -1,16 +1,14 @@
 import React from 'react';
 
-interface EmojiProps {
+export interface EmojiProps {
     label: string
-    emoji: string
+    icon: string
 }
 
-const Emoji = ({label, emoji} : EmojiProps) : JSX.Element => {
+export const Emoji = ({label, icon} : EmojiProps) : JSX.Element => {
     return (
         <span role="img" aria-label={label}>
-            {emoji}
+            {icon}
         </span>
     )
 }
-
-export default Emoji

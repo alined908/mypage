@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Avatar from './Avatar';
 import styles from '../styles/Header.module.scss';
 
+const ensLink = "https://etherscan.io/address/0x4e4eecdb19d80c61cd1d0f28b17d44df1dfaa187"
 
 export const navigationTabs = [
     {link: '/about', name: 'About'},
@@ -47,9 +48,12 @@ const ProfileSection = () => (
             <div className={styles.name}>
                 Daniel Lee
             </div>
-            <div className={styles.link}>
-                alined.eth
-            </div>
+            <a href={ensLink} rel="noreferrer" target="_blank">
+                <div className={styles.link}>
+                    <span className={styles.ensTag}>ENS</span> alined.eth
+                </div>
+            </a>
+           
         </div>
     </div>
 )

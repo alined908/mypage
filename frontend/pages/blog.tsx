@@ -5,6 +5,7 @@ import Head from 'next/head';
 import blogStyles from '../styles/blog.module.scss';
 import genericStyles from '../styles/generic.module.scss';
 import posts from '../constants/posts';
+import { AnimatedLoadDiv } from '../components/TextBox';
 
 const styles = {...genericStyles, ...blogStyles};
 
@@ -27,6 +28,8 @@ const Post = ({title, link, date, image, description, duration} : PostProps) : J
                     alt={title}
                     width={350}
                     height={210}
+                    placeholder="blur"
+                    blurDataURL={image}
                 />
                 <div className={styles.postInfo}>
                     <h2 className={styles.postTitle}>
@@ -64,15 +67,18 @@ const Blog = () : JSX.Element => {
             </Head>
             <div className={styles.container}>
                 <div className={styles.posts}>   
-                    {posts.map((post) => 
-                        <Post 
-                            title={post.title} 
-                            link={post.link} 
-                            image={post.image} 
-                            date={post.date} 
-                            description={post.description} 
-                            duration={post.duration}
-                        />
+                    {posts.map((post, index) => 
+                        <AnimatedLoadDiv position={index}>
+                            <Post 
+                                title={post.title} 
+                                link={post.link} 
+                                image={post.image} 
+                                date={post.date} 
+                                description={post.description} 
+                                duration={post.duration}
+                            />
+                        </AnimatedLoadDiv>
+                        
                     )}
                     
                 </div>

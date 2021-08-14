@@ -29,3 +29,12 @@ a {
   min-height: 100vh;
   overflow:hidden;
 }
+
+.externalLink {
+  color: darkblue;
+  font-weight: 500;
+
+  &:hover{
+      cursor: pointer;
+  }
+}

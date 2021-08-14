@@ -1,11 +1,71 @@
 import React from 'react';
-import Emoji from '../components/Emoji';
+import {EmojiProps}  from '../components/Emoji';
 import Head from 'next/head';
-import { TextBox, TextBoxSubHeader, TextBoxUnorderedList, TextBoxListItem } from '../components/TextBox';
+import { TextBox, ContainerTextBoxes } from '../components/TextBox';
 import { SplitContainer, ContainerLeft, ContainerRight } from '../components/SplitContainer';
-import styles from '../styles/generic.module.scss';
+
+interface ContainerJSON {
+    left?: TextBox[]
+    right?: TextBox[]
+}
+
+interface TextBox {
+    title: string
+    emoji: EmojiProps
+    listItems: string[]
+}
+
+const textBoxesJSON : ContainerJSON = {
+    left: [
+        {
+            title: "About Me", 
+            emoji: { label: "about", icon: "👋"},
+            listItems: ["24, Korean, from Socal", "Sometimes known as Alined"]
+        },
+        {
+            title: "Education",
+            emoji: {label: "education",icon: "🎓"},
+            listItems: ["UC Berkeley 2019", "Economics Major + Computer Science Minor"]
+        },
+        {
+            title: "Work",
+            emoji: { label: "work", icon: "🛠️" },
+            listItems: ["Amazon - Support Engineer", "San Francisco Shock - Data Analyst Intern", "UC Berkeley Student Affairs - Business Development Intern"]
+        },
+        {
+            title: "Hobbies",
+            emoji: { label: "hobbies", icon: "✨"},
+            listItems: ["Lifting - Almost at 1000 lb club!", "Gaming - Don't play much nowadays, but sometimes Apex Legends"]
+        }
+    ],
+    right: [
+        {
+            title: "Gaming + Esports",
+            emoji: {label: "gaming", icon: "🎮"},
+            listItems: [
+                "Played professionally as a main tank for Florida Mayhem Academy in Overwatch Contenders.",
+                "Analyst for San Francisco Shock, an Overwatch League team.",
+                "Captained Cal Overwatch Team to two national championships and over $100,000 in scholarships won.",
+                "Some roles I held on campus - President @ Cal Esports, VP Operations @ Gaming at Berkeley, NVIDIA GeForce Student Ambassador",
+                "My <a class='externalLink' href='https://liquipedia.net/overwatch/Alined' rel='noreferrer' target='_blank'>liquipedia</a> :()",
+                "Competitive Ladders - LoL Diamond 1 S3, CSGO ESEA Open 3rd Place, Hearthstone Top 100 Legend, Overwatch Top 10 multiple accounts, TFT 2x Challenger"
+            ]
+        },
+        {
+            title: "Current Interests",
+            emoji: {label: "interests", icon: "💡"},
+            listItems: [
+                "DeFi - An open, transparent, permissionless financial system that helps empower individuals economically sounds awesome.",
+                "Metaverse - Fascinated with the idea of an interconnected virtual world.  Gaming has always drawn me in because of alternate realities.",
+                "Investing - Attempting to generate alpha. Mostly in crypto, some stocks, nfts",
+                "Writing - Trying to stop decay and be a better writer"
+            ]
+        }
+    ]
+}
 
 const About = () : JSX.Element => {
+
     return (
         <>
             <Head>
@@ -13,109 +73,16 @@ const About = () : JSX.Element => {
                 <meta name="description" content="Personal Website" />
             </Head>
             <SplitContainer>
-                <ContainerLeft>
-                    <TextBox>
-                        <TextBoxSubHeader title="About Me">
-                            <Emoji label="about" emoji="👋"/>
-                        </TextBoxSubHeader>
-                        <TextBoxUnorderedList>
-                            <TextBoxListItem>
-                                24, Korean, from Socal
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                Sometimes known as Alined
-                            </TextBoxListItem>
-                        </TextBoxUnorderedList>
-                    </TextBox>  
-                    <TextBox>
-                        <TextBoxSubHeader title="Education">
-                            <Emoji label="education" emoji="🎓"/>
-                        </TextBoxSubHeader>
-                        <TextBoxUnorderedList>
-                            <TextBoxListItem>
-                                UC Berkeley 2019
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                Economics Major + Computer Science Minor
-                            </TextBoxListItem>
-                        </TextBoxUnorderedList>
-                    </TextBox>
-                    <TextBox>
-                        <TextBoxSubHeader title="Work">
-                            <Emoji label="work" emoji="🛠️"/>
-                        </TextBoxSubHeader>
-                        <TextBoxUnorderedList>
-                            <TextBoxListItem>
-                                Amazon - Support Engineer
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                San Francisco Shock - Data Analyst Intern
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                UC Berkeley Student Affairs - Business Development Intern
-                            </TextBoxListItem>
-                        </TextBoxUnorderedList>
-                    </TextBox>
-                    <TextBox>
-                        <TextBoxSubHeader title="Hobbies">
-                            <Emoji label="hobbies" emoji="✨"/>
-                        </TextBoxSubHeader>
-                        <TextBoxUnorderedList>
-                            <TextBoxListItem>
-                                Lifting - Almost at 1000 lb club!
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                Gaming - Don't play much nowadays, but sometimes Apex Legends
-                            </TextBoxListItem>
-                        </TextBoxUnorderedList>
-                    </TextBox>
-                </ContainerLeft>
-            <ContainerRight>
-                    <TextBox>
-                        <TextBoxSubHeader title="Gaming + Esports">
-                            <Emoji label="gaming" emoji="🎮"/>
-                        </TextBoxSubHeader>
-                        <TextBoxUnorderedList>
-                            <TextBoxListItem>
-                                Played professionally as a main tank for Florida Mayhem Academy in Overwatch Contenders.
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                Analyst for San Francisco Shock, an Overwatch League team.
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                Captained Cal Overwatch Team to two national championships and over $100,000 in scholarships won.
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                Some roles I held on campus - President @ Cal Esports, VP Operations @ Gaming at Berkeley, NVIDIA GeForce Student Ambassador
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                My <a className={styles.externalLink} href='https://liquipedia.net/overwatch/Alined' rel="noreferrer" target="_blank">liquipedia</a> :()
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                Competitive Ladders - Diamond 1 S3 in League of Legends, ESEA Open 3rd Place in CSGO, Top 100 Legend in Hearthstone, Top 10 multiple accounts in Overwatch, 2x Challenger in Teamfight Tactics
-                            </TextBoxListItem>
-                        </TextBoxUnorderedList>
-                    </TextBox>
-                    <TextBox>
-                        <TextBoxSubHeader title="Current Interests">
-                            <Emoji label="interests" emoji="💡"/>
-                        </TextBoxSubHeader>
-                        <TextBoxUnorderedList>
-                            <TextBoxListItem>
-                                DeFi - An open, transparent, permissionless financial system that helps empower individuals economically sounds awesome.
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                Metaverse - Fascinated with the idea of an interconnected virtual world.  Gaming has always drawn me in because of alternate realities.
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                Investing - Attempting to generate alpha. Mostly in crypto, some stocks, potentially nfts.
-                            </TextBoxListItem>
-                            <TextBoxListItem>
-                                Writing - Trying to stop decay and be a better writer
-                            </TextBoxListItem>
-                        </TextBoxUnorderedList>
-                    </TextBox>
-            </ContainerRight>
+                {textBoxesJSON.left && 
+                    <ContainerLeft>
+                        <ContainerTextBoxes textBoxes={textBoxesJSON.left}/>
+                    </ContainerLeft>
+                }
+                {textBoxesJSON.right &&
+                    <ContainerRight>
+                        <ContainerTextBoxes textBoxes={textBoxesJSON.right} indexOffset={textBoxesJSON.left.length}/>
+                    </ContainerRight>
+                }
             </SplitContainer>
         </>
     )

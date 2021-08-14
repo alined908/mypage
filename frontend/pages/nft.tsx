@@ -6,13 +6,14 @@ import genericStyles from '../styles/generic.module.scss';
 import nftStyles from '../styles/nft.module.scss';
 import AlinedTicket from '../artifacts/AlinedTicket.json';
 import { burnTicketError, burnTicketSuccess, connectAccountError, mintTicketError, mintTicketSuccess, wrongNetworkError } from '../actions/notifications';
-import Emoji from '../components/Emoji';
 import SVG from '../components/SVG';
 import CheckBox from '../components/CheckBox';
-import { TextBox, TextBoxSubHeader, TextBoxUnorderedList, TextBoxListItem } from '../components/TextBox';
+import { Emoji } from '../components/Emoji';
+import { TextBox, TextBoxSubHeader, TextBoxUnorderedList, TextBoxListItem, ContainerTextBoxes, AnimatedLoadDiv } from '../components/TextBox';
 import { SplitContainer, ContainerLeft, ContainerRight } from '../components/SplitContainer';
 
 const ticketAddress = "0x192d6AD08d70c9a94BFF20763ca08D01D23DD8e6";
+const nftImage = "https://gateway.pinata.cloud/ipfs/QmbwZi3Uw3Pwh4eiMibWycc9rufxd5bEYqujaoiws9ZEvc";
 const styles = {...genericStyles, ...nftStyles};
 const MetaMaskSVG = require('../public/metamask.svg');
 declare let window: any;
@@ -155,78 +156,91 @@ const NFT = () => {
         </Head>
         <SplitContainer>
           <ContainerLeft>   
-            <div className={`${styles.textBox} ${styles.responsiveImageContainer} ${styles.ticket}`}>
-              <Image 
-                src={"https://gateway.pinata.cloud/ipfs/QmbwZi3Uw3Pwh4eiMibWycc9rufxd5bEYqujaoiws9ZEvc"}
-                alt="Golden Ticket"
-                className={styles.responsiveImage}
-                layout='fill'
-              />
-            </div>
-            <TextBox>
-              <TextBoxSubHeader title="Info">
-                  <Emoji label="info" emoji="⚠️"/>
-              </TextBoxSubHeader>
-              <TextBoxUnorderedList>
-                  <TextBoxListItem>
-                    A set of digital tickets that can be redeemed for something in real life. 
-                  </TextBoxListItem>
-                  <TextBoxListItem>
-                    It's possible the set of tickets is non-fungible in that some tickets may have different prizes or monetary values.
-                  </TextBoxListItem>
-              </TextBoxUnorderedList>
-           </TextBox>
-           <TextBox>
-              <TextBoxSubHeader title="Rules">
-                  <Emoji label="rules" emoji="📜"/>
-              </TextBoxSubHeader>
-              <TextBoxUnorderedList>
-                  <TextBoxListItem>
-                    Rinkeby account needed with ether.
-                  </TextBoxListItem>
-                  <TextBoxListItem>
-                    Each person can hold only one ticket at a time. 
-                  </TextBoxListItem>
-                  <TextBoxListItem>
-                    Each person can only redeem one ticket.
-                  </TextBoxListItem>
-                  <TextBoxListItem>
-                    Max supply of 50 tickets.
-                  </TextBoxListItem>
-              </TextBoxUnorderedList>
-           </TextBox>
+            <AnimatedLoadDiv position={1}>
+              <div className={`${styles.textBox} ${styles.responsiveImageContainer} ${styles.ticket}`}>
+                <Image 
+                  src={nftImage}
+                  alt="Golden Ticket"
+                  className={styles.responsiveImage}
+                  layout='fill'
+                  placeholder="blur"
+                  blurDataURL={nftImage}
+                />
+              </div>
+            </AnimatedLoadDiv>
+            <AnimatedLoadDiv position={2}>
+              <TextBox>
+                <TextBoxSubHeader title="Info">
+                    <Emoji label="info" icon="⚠️"/>
+                </TextBoxSubHeader>
+                <TextBoxUnorderedList>
+                    <TextBoxListItem>
+                      A set of digital tickets that can be redeemed for something in real life. 
+                    </TextBoxListItem>
+                    <TextBoxListItem>
+                      It's possible the set of tickets is non-fungible in that some tickets may have different prizes or monetary values.
+                    </TextBoxListItem>
+                </TextBoxUnorderedList>
+              </TextBox>
+            </AnimatedLoadDiv>
+            <AnimatedLoadDiv position={3}>
+              <TextBox>
+                <TextBoxSubHeader title="Rules">
+                    <Emoji label="rules" icon="📜"/>
+                </TextBoxSubHeader>
+                <TextBoxUnorderedList>
+                    <TextBoxListItem>
+                      Rinkeby account needed with ether.
+                    </TextBoxListItem>
+                    <TextBoxListItem>
+                      Each person can hold only one ticket at a time. 
+                    </TextBoxListItem>
+                    <TextBoxListItem>
+                      Each person can only redeem one ticket.
+                    </TextBoxListItem>
+                    <TextBoxListItem>
+                      Max supply of 50 tickets.
+                    </TextBoxListItem>
+                </TextBoxUnorderedList>
+              </TextBox>
+            </AnimatedLoadDiv>
           </ContainerLeft>
           <ContainerRight>
-            <TextBox>
-              <TextBoxSubHeader title="Step 1 - Download MetaMask">
-                <CheckBox checked={metaMaskDownloaded}/>
-              </TextBoxSubHeader>
-              {!metaMaskDownloaded && 
-                <TextBoxUnorderedList>
-                  <TextBoxListItem>
-                  MetaMask is a browser extension that let's you interact with Ethereum dapps and is an interface to view your wallet.  
-                  </TextBoxListItem>
-                  <SVG link="https://metamask.io/">
-                    <MetaMaskSVG width={40} height={40} viewBox="0 0 40 40"/>
-                  </SVG>
-                </TextBoxUnorderedList>
-              }
-           </TextBox>
-           <TextBox>
-              <TextBoxSubHeader title="Step 2 - Connect to Metamask">
-                <CheckBox checked={account}/>
-              </TextBoxSubHeader>
-              <TextBoxUnorderedList>
-                {metaMaskDownloaded && !account && 
-                  <div className={styles.wallet}>
-                    <button className={styles.button} onClick={connectAccount}>
-                      {loading && <div className={styles.spinner}></div>}
-                      Connect Wallet
-                    </button> 
-                  </div>
+            <AnimatedLoadDiv position={4}>
+              <TextBox>
+                <TextBoxSubHeader title="Step 1 - Download MetaMask">
+                  <CheckBox checked={metaMaskDownloaded}/>
+                </TextBoxSubHeader>
+                {!metaMaskDownloaded && 
+                  <TextBoxUnorderedList>
+                    <TextBoxListItem>
+                      MetaMask is a browser extension that let's you interact with Ethereum dapps and is an interface to view your wallet.  
+                    </TextBoxListItem>
+                    <SVG link="https://metamask.io/">
+                      <MetaMaskSVG width={40} height={40} viewBox="0 0 40 40"/>
+                    </SVG>
+                  </TextBoxUnorderedList>
                 }
-              </TextBoxUnorderedList>
-           </TextBox>
+            </TextBox>
+           </AnimatedLoadDiv>
+           <AnimatedLoadDiv position={5}>
+            <TextBox>
+                <TextBoxSubHeader title="Step 2 - Connect to Metamask">
+                  <CheckBox checked={account}/>
+                </TextBoxSubHeader>
+                <TextBoxUnorderedList>
+                  {metaMaskDownloaded && !account && 
+                    <div className={styles.wallet}>
+                      <button className={styles.button} onClick={connectAccount}>
+                        {loading && <div className={styles.spinner}></div>}
+                        Connect Wallet
+                      </button> 
+                    </div>
+                  }
+                </TextBoxUnorderedList>
+            </TextBox>
+          </AnimatedLoadDiv>
+          <AnimatedLoadDiv position={6}>
             <TextBox>
               <TextBoxSubHeader title="Step 3 - Mint Ticket">
                 <CheckBox checked={account && minted}/>
@@ -251,33 +265,36 @@ const NFT = () => {
                   </>
                 }
               </TextBoxUnorderedList>
-           </TextBox> 
-           <TextBox>
-              <TextBoxSubHeader title="Step 4 - Burn Ticket">
-                <CheckBox checked={account && minted && burned}/>
-              </TextBoxSubHeader>
-              <TextBoxUnorderedList>
-                {account && minted && !burned && 
-                  <div className={styles.wallet}>
-                    <button className={styles.button} onClick={burnTicket} disabled={loading}>
-                      {loading && <div className={styles.spinner}></div>}
-                      Burn Ticket
-                    </button> 
-                  </div>
-                }
-                {account && minted && burned &&
-                  <>
-                    <TextBoxListItem>
-                      You have burned a ticket! Contact me for more details!
-                    </TextBoxListItem>
-                 </>
-                }
-              </TextBoxUnorderedList>
-           </TextBox>   
-          </ContainerRight>     
-        </SplitContainer>
-      </>
-    )
+            </TextBox> 
+           </AnimatedLoadDiv>
+           <AnimatedLoadDiv position={7}>
+            <TextBox>
+                <TextBoxSubHeader title="Step 4 - Burn Ticket">
+                  <CheckBox checked={account && minted && burned}/>
+                </TextBoxSubHeader>
+                <TextBoxUnorderedList>
+                  {account && minted && !burned && 
+                    <div className={styles.wallet}>
+                      <button className={styles.button} onClick={burnTicket} disabled={loading}>
+                        {loading && <div className={styles.spinner}></div>}
+                        Burn Ticket
+                      </button> 
+                    </div>
+                  }
+                  {account && minted && burned &&
+                    <>
+                      <TextBoxListItem>
+                        You have burned a ticket! Contact me for more details!
+                      </TextBoxListItem>
+                  </>
+                  }
+                </TextBoxUnorderedList>
+            </TextBox>   
+          </AnimatedLoadDiv>
+        </ContainerRight>     
+      </SplitContainer>
+    </>
+  )
 }
 
 export default NFT
