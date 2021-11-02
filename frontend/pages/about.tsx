@@ -30,7 +30,7 @@ const textBoxesJSON : ContainerJSON = {
         {
             title: "Work",
             emoji: { label: "work", icon: "🛠️" },
-            listItems: ["Amazon - Support Engineer", "San Francisco Shock - Data Analyst Intern", "UC Berkeley Student Affairs - Business Development Intern"]
+            listItems: ["Amazon - Engineer", "San Francisco Shock - Data Analyst Intern", "UC Berkeley Student Affairs - Business Development Intern"]
         },
         {
             title: "Hobbies",
